@@ -19,6 +19,12 @@ function Todo() {
     setList([item, ...list])
   }
 
+  function onKeyUp(e: React.KeyboardEvent, todo: string) {
+    if (e.code === 'Enter') {
+      addTodo(todo)
+    }
+  }
+
   return (
     <div className="todo-app">
       <div className="todo-app__header">
@@ -27,6 +33,7 @@ function Todo() {
           type="text"
           value={todo}
           onChange={e => setTodo(e.target.value)}
+          onKeyUp={e => onKeyUp(e, todo)}
           placeholder="New ToDo"
         />
         <button

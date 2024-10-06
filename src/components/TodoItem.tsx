@@ -25,6 +25,12 @@ function TodoItem({
     setIsEdit(false)
   }
 
+  function onKeyUp(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.code === 'Enter') {
+      setIsEdit(false)
+    }
+  }
+
   return (
     <li className="todo-app__item">
       {/* <span className="todo-app__item-color" /> */}
@@ -60,6 +66,7 @@ function TodoItem({
                 className="todo-app__item-editor"
                 onChange={e => onItemChange(item, e.target.value)}
                 onBlur={() => handleBlur()}
+                onKeyUp={e => onKeyUp(e)}
               />
             )
           : (
