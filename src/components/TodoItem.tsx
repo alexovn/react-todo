@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from 'react'
 function TodoItem({
   item,
   onItemChange,
+  onItemRemove,
 }: {
   item: ITodoItem
   onItemChange: (item: ITodoItem, name: string) => void
+  onItemRemove: (id: string) => void
 }) {
   const [isEdit, setIsEdit] = useState(false)
   const itemRef = useRef<HTMLInputElement>(null)
@@ -79,11 +81,12 @@ function TodoItem({
             )
       }
 
-      {/* <button
+      <button
         className="todo-app__remove-btn"
         type="button"
+        onClick={() => onItemRemove(item.id)}
       >
-      </button> */}
+      </button>
     </li>
   )
 }
