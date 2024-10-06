@@ -5,10 +5,12 @@ function TodoItem({
   item,
   onItemChange,
   onItemRemove,
+  onItemComplete,
 }: {
   item: ITodoItem
   onItemChange: (item: ITodoItem, name: string) => void
   onItemRemove: (id: string) => void
+  onItemComplete: (item: ITodoItem, completed: boolean) => void
 }) {
   const [isEdit, setIsEdit] = useState(false)
   const itemRef = useRef<HTMLInputElement>(null)
@@ -35,6 +37,7 @@ function TodoItem({
 
   return (
     <li className="todo-app__item">
+      {item.completed}
       {/* <span className="todo-app__item-color" /> */}
 
       {/* <input
@@ -50,14 +53,18 @@ function TodoItem({
         </span>
       </span> */}
 
-      {/* <input
-        className="checkbox"
-        type="checkbox"
-      />
-      <span
-        className="todo-app__item-checkbox"
-      >
-      </span> */}
+      <label>
+        <input
+          className="checkbox"
+          type="checkbox"
+          checked={item.completed}
+          onChange={e => onItemComplete(item, e.target.checked)}
+        />
+        <span
+          className="todo-app__item-checkbox"
+        >
+        </span>
+      </label>
 
       {
         isEdit
@@ -73,7 +80,7 @@ function TodoItem({
             )
           : (
               <label
-                className="todo-app__item-name"
+                className={`todo-app__item-name ${item.completed ? 'completed' : ''}`}
                 onDoubleClick={() => handleEdit()}
               >
                 {item.name}

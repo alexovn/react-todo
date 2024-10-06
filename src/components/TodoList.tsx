@@ -28,6 +28,20 @@ function TodoList({
     onSetList(newList)
   }
 
+  function completeTodo(item: ITodoItem, completed: boolean) {
+    const newList = list.map((todo) => {
+      if (todo.id !== item.id)
+        return todo
+
+      return {
+        ...todo,
+        completed,
+      }
+    })
+
+    onSetList(newList)
+  }
+
   return (
     <ul className="todo-app__list">
       {list.map(item => (
@@ -36,6 +50,7 @@ function TodoList({
           item={item}
           onItemChange={changeTodo}
           onItemRemove={removeTodo}
+          onItemComplete={completeTodo}
         />
       ))}
     </ul>
