@@ -23,11 +23,6 @@ function TodoList({
     onSetList(newList)
   }
 
-  function removeTodo(id: string) {
-    const newList = list.filter(item => item.id !== id)
-    onSetList(newList)
-  }
-
   function completeTodo(item: ITodoItem, completed: boolean) {
     const newList = list.map((todo) => {
       if (todo.id !== item.id)
@@ -36,6 +31,26 @@ function TodoList({
       return {
         ...todo,
         completed,
+      }
+    })
+
+    onSetList(newList)
+  }
+
+  function removeTodo(id: string) {
+    const newList = list.filter(item => item.id !== id)
+    onSetList(newList)
+  }
+
+  function pinTodo(item: ITodoItem, pinned: boolean) {
+    const newList = list.map((todo) => {
+      if (todo.id !== item.id) {
+        return todo
+      }
+
+      return {
+        ...todo,
+        pinned,
       }
     })
 
@@ -51,6 +66,7 @@ function TodoList({
           onItemChange={changeTodo}
           onItemRemove={removeTodo}
           onItemComplete={completeTodo}
+          onItemPinned={pinTodo}
         />
       ))}
     </ul>

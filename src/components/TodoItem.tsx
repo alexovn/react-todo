@@ -6,11 +6,13 @@ function TodoItem({
   onItemChange,
   onItemRemove,
   onItemComplete,
+  onItemPinned,
 }: {
   item: ITodoItem
   onItemChange: (item: ITodoItem, name: string) => void
   onItemRemove: (id: string) => void
   onItemComplete: (item: ITodoItem, completed: boolean) => void
+  onItemPinned: (item: ITodoItem, pinned: boolean) => void
 }) {
   const [isEdit, setIsEdit] = useState(false)
   const itemRef = useRef<HTMLInputElement>(null)
@@ -36,22 +38,22 @@ function TodoItem({
   }
 
   return (
-    <li className="todo-app__item">
-      {item.completed}
-      {/* <span className="todo-app__item-color" /> */}
-
-      {/* <input
-        type="checkbox"
-        className="pin-checkbox"
-      />
-
-      <span
-        className="todo-app__item-pin"
-      >
-        <span className="todo-app__item-pin-icon">
-          <i className="fas fa-thumbtack"></i>
+    <li className={`todo-app__item ${item.pinned ? 'pinned' : ''}`}>
+      <label>
+        <input
+          type="checkbox"
+          className="pin-checkbox"
+          checked={item.pinned}
+          onChange={e => onItemPinned(item, e.target.checked)}
+        />
+        <span
+          className="todo-app__item-pin"
+        >
+          <span className="todo-app__item-pin-icon">
+            <i className="fas fa-thumbtack"></i>
+          </span>
         </span>
-      </span> */}
+      </label>
 
       <label>
         <input
