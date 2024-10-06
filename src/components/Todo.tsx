@@ -1,11 +1,12 @@
 import type { TodoItem as ITodoItem } from '@/types/TodoItem'
 import TodoList from '@/components/TodoList'
 import uniqueId from '@/utils/uniqueId'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 function Todo() {
   const [todo, setTodo] = useState('')
   const [list, setList] = useState<ITodoItem[]>([])
+  const [activeFilter, setActiveFilter] = useState('All')
 
   function addTodo(todo: string) {
     const item = {
@@ -23,6 +24,34 @@ function Todo() {
     if (e.code === 'Enter') {
       addTodo(todo)
     }
+  }
+
+  const filteredList = useMemo(() => {
+    function filterList() {
+      if (activeFilter === 'All') {
+        return list
+      }
+
+      if (activeFilter === 'Active') {
+        return list.filter(item => !item.completed)
+      }
+
+      if (activeFilter === 'Completed') {
+        return list.filter(item => item.completed)
+      }
+
+      return []
+    }
+    return filterList()
+  }, [list, activeFilter])
+
+  const filteredListSentence = useMemo(() => {
+    return `${filteredList.length} ${filteredList.length === 1 ? 'item' : 'items'} left`
+  }, [filteredList])
+
+  function clearCompletedTodos() {
+    const newList = list.filter(item => !item.completed)
+    setList(newList)
   }
 
   return (
@@ -46,33 +75,45 @@ function Todo() {
       </div>
       <div className="todo-app__main">
         <TodoList
-          list={list}
+          list={filteredList}
           onSetList={(newList: ITodoItem[]) => setList(newList)}
         />
       </div>
 
-      {/* <div className="todo-app__footer">
+      <div className="todo-app__footer">
         <div className="todo-app__counter">
-          left
+          {filteredListSentence}
         </div>
         <ul className="todo-app__filters">
-          <li className="todo-app__filters-item">
+          <li
+            className="todo-app__filters-item"
+            onClick={() => setActiveFilter('All')}
+          >
             <a
               href="#!"
+              className={`${activeFilter === 'All' ? 'selected' : ''}`}
             >
               All
             </a>
           </li>
-          <li className="todo-app__filters-item">
+          <li
+            className="todo-app__filters-item"
+            onClick={() => setActiveFilter('Active')}
+          >
             <a
-              href="#"
+              href="#!"
+              className={`${activeFilter === 'Active' ? 'selected' : ''}`}
             >
               Active
             </a>
           </li>
-          <li className="todo-app__filters-item">
+          <li
+            className="todo-app__filters-item"
+            onClick={() => setActiveFilter('Completed')}
+          >
             <a
               href="#!"
+              className={`${activeFilter === 'Completed' ? 'selected' : ''}`}
             >
               Completed
             </a>
@@ -81,10 +122,11 @@ function Todo() {
         <button
           className="btn todo-app__clear-btn"
           type="button"
+          onClick={() => clearCompletedTodos()}
         >
           Clear completed
         </button>
-      </div> */}
+      </div>
     </div>
   )
 }
