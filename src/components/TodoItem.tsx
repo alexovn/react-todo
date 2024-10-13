@@ -39,33 +39,26 @@ function TodoItem({
 
   return (
     <li className={`todo-app__item ${item.pinned ? 'pinned' : ''}`}>
-      <label>
+      <label className="todo-app__item-pin">
         <input
           type="checkbox"
           className="pin-checkbox"
           checked={item.pinned}
           onChange={e => onItemPinned(item, e.target.checked)}
         />
-        <span
-          className="todo-app__item-pin"
-        >
-          <span className="todo-app__item-pin-icon">
-            <i className="fas fa-thumbtack"></i>
-          </span>
+        <span className="todo-app__item-pin-icon">
+          <i className="fas fa-thumbtack"></i>
         </span>
       </label>
 
-      <label>
+      <label className="todo-app__item-checkbox">
         <input
           className="checkbox"
           type="checkbox"
           checked={item.completed}
           onChange={e => onItemComplete(item, e.target.checked)}
         />
-        <span
-          className="todo-app__item-checkbox"
-        >
-        </span>
+        <span></span>
       </label>
 
       {
