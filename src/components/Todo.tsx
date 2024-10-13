@@ -1,12 +1,34 @@
 import type { TodoItem as ITodoItem } from '@/types/TodoItem'
 import TodoList from '@/components/TodoList'
 import uniqueId from '@/utils/uniqueId'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 function Todo() {
   const [todo, setTodo] = useState('')
   const [list, setList] = useState<ITodoItem[]>([])
   const [activeFilter, setActiveFilter] = useState('All')
+
+  useEffect(() => {
+    const list = localStorage.getItem('todo-list')
+
+    if (list) {
+      const restoredList = JSON.parse(list)
+      setList(restoredList)
+    }
+    else {
+      const defaultItem = {
+        id: uniqueId('todo-'),
+        name: 'Walk with a dog 🐕',
+        completed: false,
+        pinned: false,
+      }
+      setList([defaultItem])
+    }
+  }, [])
+
+  function storeList(list: ITodoItem[]) {
+    localStorage.setItem('todo-list', JSON.stringify(list))
+  }
 
   function addTodo(todo: string) {
     const item = {
@@ -18,6 +40,7 @@ function Todo() {
 
     setTodo('')
     setList([item, ...list])
+    storeList([item, ...list])
   }
 
   function onKeyUp(e: React.KeyboardEvent, todo: string) {
@@ -52,6 +75,12 @@ function Todo() {
   function clearCompletedTodos() {
     const newList = list.filter(item => !item.completed)
     setList(newList)
+    storeList(newList)
+  }
+
+  function handleSetList(newList: ITodoItem[]) {
+    setList(newList)
+    storeList(newList)
   }
 
   return (
@@ -76,7 +105,7 @@ function Todo() {
       <div className="todo-app__main">
         <TodoList
           list={filteredList}
-          onSetList={(newList: ITodoItem[]) => setList(newList)}
+          onSetList={(newList: ITodoItem[]) => handleSetList(newList)}
         />
       </div>
 
